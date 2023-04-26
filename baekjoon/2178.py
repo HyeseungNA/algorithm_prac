@@ -2,15 +2,18 @@
 from collections import deque
 
 
-def bfs(x,y):
-    global cnt
+def bfs(x,y,cnt):
     q = deque()
-    q.append(adj[y][x])
+    #y좌표, x좌표, 이동거리
+    q.append((y,x,cnt))
+    visited[y][x] = 1
 
 
     while q:
-        q.popleft()
-        cnt += 1
+        y,x,cnt = q.popleft()
+        if (y == N-1 and x == M-1):
+            return cnt
+
 
         #다음노드
         dy = [0,1,0,-1]
@@ -20,25 +23,30 @@ def bfs(x,y):
             ny = y + dy[i]
             nx = x + dx[i]
 
-            #범위
+            #범위 벗어나면 넘어가
             if nx < 0 or nx >= M or ny < 0 or ny >= N or adj[ny][nx] == 0:
                 continue
+            #방문 안했으면 큐에 넣어
+            if visited[ny][nx] == 0:
+                q.append((ny,nx,cnt+1))
+                visited[ny][nx] =  1
+    
 
-            q.append(adj[ny][nx])
-    return cnt
+    return 
 
 
 
 N,M = map(int,input().split())
 
 adj = []
-cnt = 0
+visited = [[0]*M for _ in range(N)]
+
+
 for _ in range(N):
     adj.append(list(map(int,input())))
 
 
+print(bfs(0,0,1))
 
-
-print(bfs(1,1))
 
 
