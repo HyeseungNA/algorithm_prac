@@ -1,24 +1,34 @@
-from collections import deque
+# from collections import deque
 
 #현재위치,바이러스 걸린 갯수
-def bfs(v):
-    cnt = 0
-    q = deque()
-    q.append(v)
+# def bfs(v):
+#     cnt = 0
+#     q = deque()
+#     q.append(v)
+#     visited[v] = 1
+
+#     while q:
+#         point= q.popleft()
+#         for i in adj[point]:
+#             if visited[i] == 0:
+#                 cnt += 1
+#                 visited[i] = 1
+#                 q.append(i)
+#     return cnt
+
+
+
+def dfs(v):
+    global cnt
     visited[v] = 1
 
-    while q:
-        point= q.popleft()
-        for i in adj[point]:
-            if visited[i] == 0:
-                cnt += 1
-                visited[i] = 1
-                q.append(i)
+    for i in adj[v]:
+        if visited[i] == 0:
+            cnt += 1
+            dfs(i)
+    
     return cnt
-
-
-
-
+    
 
 
 computers = int(input())
@@ -29,7 +39,6 @@ for _ in range(n):
     a,b = map(int,input().split())
     adj[a].append(b)
     adj[b].append(a)
-
-
-print(bfs(1))
+cnt = 0
+print(dfs(1))
 
