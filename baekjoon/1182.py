@@ -1,11 +1,12 @@
 n,s = map(int,input().split())
 lst = list(map(int,input().split()))
 answer = 0
-# s랑 같으면 개수 더해주기
+
 def dfs(level,total):
     global answer
     
     if level == n:
+        # s랑 같으면 개수 더해주기
         if total == s:
             answer += 1
         return
