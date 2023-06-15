@@ -1,50 +1,27 @@
-# 깊이가 n이랑 같으면 return 
-# 다음 노드가 세로, 가로, 대각선에 위치하면 안돼
+import sys
+n = int(sys.stdin.readline().rstrip())
 
-def dfs(y,x):
+ans = 0
+row = [0] * n
 
-    found(y,x)
-    global cnt
-    # 깊이가 n이면 return 
-    if depth == n:
-        # 경우의 수 더해줘야해
-        cnt+=1
-        return
-    # queens에 queen 넣어줘
-
-    # 다음 queen 찾아
-    found(y,x)
-
-
-
-# 다음 queen 찾는 함수
-def found(y,x):
-    for i in range(n):
-    # 범위 확인
-        if 0 <= i < n and
-
-    # 가로 확인
-        i !=n
-
-    # 세로 확인
+def is_promising(x):
+    for i in range(x):
+        if row[x] == row[i] or abs(row[x] - row[i]) == abs(x - i):
+            return False
     
+    return True
 
-    # 대각선 확인
+def n_queens(x):
+    global ans
+    if x == n:
+        ans += 1
 
-    # 다음 퀸 이어서 dfs
-    
+    else:
+        for i in range(n):
+            # [x, i]에 퀸을 놓겠다.
+            row[x] = i
+            if is_promising(x):
+                n_queens(x+1)
 
-
-
-
-n= int(input())
-queens = [[0] * n for _ in range(n)]
-
-depth = 0
-cnt = 0
-
-queens[0][0]
-
-dfs(0,0)
-
-print(cnt)
+n_queens(0)
+print(ans)
