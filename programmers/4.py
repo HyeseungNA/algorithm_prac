@@ -1,38 +1,41 @@
 from collections import deque
+# 외부 공기로 표시해주기
 
-# 내부 공기 표시해주기
-def check(y,x):
-    inner = [[0]  * m for _ in range(n)]
+# 1이 사라질 때까지 반복
 
-    # 모든 방향을 탐색
-    dy = [-1,0,1,0]
-    dx = [0,-1,0,1]
-    for i in range(4):
-        idx = 1
-        cnt = 0
-        while True:
-            ny = y + (dy * idx)
-            nx = x + (dx * idx)
-            # 범위를 벗어날때까지 긔
-            if 0 > ny or ny > n or 0 > nx or nx > m:
-                break
-            # 만약에 가다가 얼음을 만나면 개수 추가
-            if inner[ny][nx] == 1:
-                cnt += 1
-            # 만난 얼음이 4개라면 내부 얼음 표시 해주기
-            if cnt == 4:
-                inner[y][x] = 2
-            idx += 1
+def find():
+    print(ice)
+    visited = [[0] * m for _ in range(n)]
 
+    q.append((0,0))
 
-
-
-
-def bfs(y,x):
-    # 외부 공기가 2개 이상이면 q에 넣어주기
-    
     while q:
+        
+        y,x = q.popleft()
+        # 외부공기 표시해주기
+        ice[y][x] = 2
+        # 방문표시해주기
+        visited[y][x] = 1
 
+
+        dy = [-1,0,1,0]
+        dx = [0,-1,0,1]
+
+        for i in range(4):
+            ny = y + dy[i]
+            nx = x + dx[i]
+
+            # 외부공기이고 방문을 안하면
+            if 0<= ny < n and 0 <= nx < m and visited[ny][nx] == 0:
+                if ice[ny][nx] == 0 or ice[ny][nx] == 2:
+                    q.append((ny,nx))
+
+
+
+# 얼음 녹이기
+def melt(y,x):
+    global ice_melt,melt_lst
+    cnt = 0
 
     dy = [-1,0,1,0]
     dx = [0,-1,0,1]
@@ -41,27 +44,55 @@ def bfs(y,x):
         ny = y + dy[i]
         nx = x + dx[i]
 
-        if 0 <= nx < m and 0 <= ny < n:
-            if ice[ny][nx] == 0:
+        # 외부공기를 만나면 개수 더해주기
+        if 0 <= ny < n and 0 <= nx < m:
+            if ice[ny][nx] == 2:
                 cnt += 1
     
-
+    # 외부공기가 2개 이상이면
     if cnt >= 2:
-        q.append(ny,nx)
-    
+        # 외부 공기를 만들어주고
+        # 얼음을 녹여줘
+        melt_lst.append([y,x])
 
 
 n,m = map(int,input().split())
 ice = [list(map(int,input().split())) for _ in range(n)]
+
 q = deque()
+# 얼음 개수
+ice_cnt = 0
+result = 0
+melt_lst = []
+for i in range(n):
+    ice_cnt += ice[i].count(1)
+
+while ice_cnt > 0:
+
+    ice_melt = len(melt_lst)
+    # 남은 얼음에서 녹은 얼음 빼주기
+    ice_cnt -= ice_melt
+
+    # print(melt_lst,'_____')
+
+    # 한꺼번에 얼음을 공기로 바꿔주기
+    for y,x in melt_lst:
+        ice[y][x] == 0
+
+    # 외부 공기 표시하기
+    find()
+    # 녹음 얼음 리스트 초기화 해주기
+    melt_lst = []
+    
 
 
-for i in range(m):
-    for j in range(n):
-        check(i,j)
+   
 
-for i in range(m):
-    for j in range(n):
-        if ice[i][j] == 1:
-            bfs(i,j)
+    # 얼음 녹이기
+    for i in range(n):
+        for j in range(m):
+            if ice[i][j] == 1:
+                melt(i,j)
+    result += 1
 
+print(result)
