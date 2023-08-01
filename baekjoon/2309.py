@@ -23,7 +23,7 @@ def find_dwarf(start, cnt,total):
 
 
 dwarf = list(int(input()) for _ in range(9))
-
+print(dwarf)
 # 오름차순으로 정렬부터
 dwarf.sort()
 
