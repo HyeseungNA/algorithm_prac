@@ -3,19 +3,17 @@ def solution(people,limit):
     people.sort()
 
     now = 0
-    new = len(people) - 1
+    ne = len(people) - 1
 
-    while now <= new:
+    while now <= ne:
 
-        if people[now] + people[new] > limit:
-            new -= 1
-            answer += 1
-        else:
+        if people[now] + people[ne] <= limit:
             now += 1
-            new -= 1
-            answer += 1
-
+            ne -=1
+            answer +=1
+        else:
+            ne -= 1
+            answer +=1
     return answer
-
     
 solution([70,50,80,50],100)
