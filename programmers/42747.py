@@ -1,18 +1,13 @@
 def solution(citations):
-    citations.sort()
-    n = 0
-    while True:
-        st = 0
-        ed = 0
-        for num in citations:
-            if n <= num:
-                st += 1
-            else:
-                ed += 1
-        if st < ed:
-            break
-        n += 1
-
-    return n - 1
-
-result = solution([3, 0, 6, 1, 5])
+    citations.sort(reverse=True)
+    n = len(citations)
+    answer = 0
+    # 논문을 돌면서
+    for i in range(1,n+1):
+        # 순위가 더 작거나 같으면 answer값 업데이트
+        if i <= citations[i-1]:
+            answer = i
+            
+    return answer
+result = solution([3,3,3])
+print(result)
