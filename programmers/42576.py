@@ -1,25 +1,22 @@
-def solution(participant, completion):
-    answer = ''
-    # 참가자 딕셔너리에 넣기
-    par = dict()
-    for i in range(len(participant)):
-        if participant[i] not in par:
-            par[participant[i]] = 1
-        else:
-            par[participant[i]] += 1
+# from collections import Counter
+
+# def solution(participant,completion):
+
+#     answer = Counter(participant) - Counter(completion)
+#     print(list(answer.keys())[0])
+#     return
+# solution(["mislav", "stanko", "mislav", "ana"],["stanko", "ana", "mislav"])
 
 
-    # 완주자 돌면서
-    for key in completion:
-        # 참가자 리스트에 있으면
-        if key in par:
-            # 카운트 빼주기
-            par[key] -= 1
-    # 참가자 value가 1인 key 뽑기
-    for key in par:
-        if par[key] >= 1:
-            answer = key
+def solution(participants,completion):
+    # 참가자 딕셔너리
+    answer = Counter(participants)
+    
+    for com in completion:
+        if com in answer:
+            answer[com] -= 1
+    
+    for key in answer:
+        if answer[key] >= 1:
+            return key 
 
-    return answer
-
-solution(["mislav", "stanko", "mislav", "ana"],["stanko", "ana", "mislav"])
