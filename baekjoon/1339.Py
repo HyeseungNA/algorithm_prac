@@ -13,19 +13,20 @@ def dfs1(st,cnt,dept,lst):
         lst.append(vowel[i])
         dfs1(i,cnt, dept + 1,lst)
 
-def dfs2(st,cnt,dept,lst2):
+def dfs2(st,cnt,dept,lst):
     global total2
 
     # 현재 깊이가 cnt와 같으면 그만
     if cnt == dept:
-        print(lst2)
+        lst.sort()
+        print(*lst)
         total2 += 1
         return 
 
     for i in range(st+1,len(consonant)):
-        lst2.append(consonant[i])
-        dfs2(i,cnt, dept + 1,lst2)
-        lst2.pop()
+        lst.append(consonant[i])
+        dfs2(i,cnt, dept + 1,lst)
+        lst.pop()
 
 
 n,m = map(int,input().split())
@@ -48,19 +49,19 @@ for i in range(1,len(vowel) + 1):
         # 모음, 자음 숫자 조합
         if i + j == n:
             # print(i,j,'🌸')
-            lst = []
-            lst2 = []
+            
             for m in range(len(vowel)): 
                 total1 = 0 # 모음 조합 가능 갯수
                 total2 = 0 # 자음 조합 가능 갯수
+                lst = []
                 lst = [vowel[m]] # 모음 넣는 리스트
                 dfs1(m,i,1,lst)
                 # print(total1,'🌹')
                
                 for k in range(len(consonant)):
-                    lst2.append(consonant[k])
-                    dfs2(k,j,1,lst2)
-                    lst2.pop()
+                    lst.append(consonant[k])
+                    dfs2(k,j,1,lst)
+                    lst.pop()
                 # print(total2,'___') 
                 # print(total1,'🫢')
                 # print(answer,'❗️')
