@@ -36,9 +36,11 @@ def dfs(n,cnt,scnt):
                     ans += 1
         return
 
+    # 포함 했을 때  
     v1[n//5][n%5] = 1
     dfs(n+1,cnt+1, scnt+int(arr[n//5][n%5]=='S'))
     v1[n//5][n%5] = 0
+    # 포함 하지 않을 때
     dfs(n+1,cnt,scnt)
 arr = [input() for _ in range(5)]
 ans = 0
