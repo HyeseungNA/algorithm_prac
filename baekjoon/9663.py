@@ -1,27 +1,32 @@
-import sys
-n = int(sys.stdin.readline().rstrip())
+# 세로 시작
+# 가로 인접 확인 & 대각선 확인
 
-ans = 0
-row = [0] * n
+def dfs(y,x):
+    if y == n:
+        cnt += 1
+        return
 
-def is_promising(x):
-    for i in range(x):
-        if row[x] == row[i] or abs(row[x] - row[i]) == abs(x - i):
-            return False
-    
-    return True
+    for i in range(n):
+        # 가로 확인 및 대각선 확인
+        if v1[i] == 0:
+            # 대각선 확인에서 틀림
+            if abs((y+1)-y) != abs(i-x):
+                v1[i] = 1
+                v2[y+1][i] = 1
+                dfs(y+1,)
 
-def n_queens(x):
-    global ans
-    if x == n:
-        ans += 1
+        
+        return
 
-    else:
-        for i in range(n):
-            # [x, i]에 퀸을 놓겠다.
-            row[x] = i
-            if is_promising(x):
-                n_queens(x+1)
-
-n_queens(0)
-print(ans)
+n = int(input())
+v1 = [0] * n
+v2 = [[0] * n for _ in range(n)]
+cnt = 0
+for i in range(n):
+    # 방문처리해주기
+    v2[0][i] = 1
+    # 가로 방문 처리
+    v1[i] = 1
+    dfs(0,i) # 세로 시작, 가로 인덱스
+    v2[0][i] = 0
+    v1[i] = 0
