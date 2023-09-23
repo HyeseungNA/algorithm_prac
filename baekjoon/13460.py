@@ -1,78 +1,88 @@
-# 모든 경우의 수를 다 보기,,?
-# R의 이동 관련한 방문 리스트 만들기
-
-
-def check(y,x,d):
+from collections import deque
+# 빨간공 파란 공 이동
+def move(x, y, dx, dy):
     cnt = 0
-    # 다음 갈 곳이 범위 안에 있으면
-    ny = y + dy[d]
-    nx = x + dx[d]
-    while True:
-        if 0 <= ny < n and 0 <= nx < m:
-            if boards[ny][nx] != '#' or boards[y][x] != '0':
-                y = ny
-                x = nx
-                cnt += 1
 
-    return y,x,cnt
+    while boards[y + dy][x + dx] != '#' and boards[y][x] != 'O':
+        x += dx
+        y += dy
+        cnt += 1
+    return y, x, cnt
 
-    # 이동
 
-def go(rx,ry,bx,by,cnt):
+    
+def go():
+    global Min
+    
+    # 큐가 없을 때까지 계속
+    while q:
+        # 현재 위치와 이동횟수
+        ry,rx,by,bx,total = q.popleft()
+        if total > 10:
+            break
 
-    if cnt > 10 :
-        return
-    # 빨간공이 0을 만나면 멈춰
-    if boards[ry][rx] == 'O':
-        result.append(cnt)
-        return
+        # 사방탐색 시작
+        for i in range(4):
+            rny, rnx, r_cnt = move(rx,ry,dx[i],dy[i])
+            bny, bnx, b_cnt = move(bx,by,dx[i],dy[i])
 
-    # 사방탐색 시작
-    for i in range(4):
-        rny,rnx,rcnt = check(ry,rx,i)
-        bny,bnx,bcnt = check(by,bx,i)
+            # 파란 공이 구멍안에 안들어가면
+            if boards[bny][bnx] != 'O':
+                if rny == bny and rnx == bnx:
 
-        # 만약에 파란공이 먼저 구멍에 들어가면
-        # 다시 해야됨
-        if boards[bny][bnx] == 'O':
-            return 
+                    # 빨간공이 구멍에 들어가면
+                    if boards[rny][rnx] == 'O':
+                        if Min > total:
+                            Min = total
 
-        # 만약에 둘다 같은 곳이면?
-        # 더 빨리 도착한 공한테 양보하세요
-        if rny == bny and rnx == bnx:
-            if rcnt > bcnt:
-                rny -= dy[i]
-                rnx -= dx[i]
-            else:
-                bny -= dy[i]
-                bnx -= dx[i]
-            
-        # 빨간 공이 구멍이면?
-        if boards[bny][bnx] == 'O':
-            Min = min(Min,cnt)
-    go(rx,ry,bx,by,cnt+1)
-        
+                    # 빨간공 횟수가 더 크면
+                    if r_cnt > b_cnt:
+                        rny -= dy[i]
+                        rnx -= dx[i]
+                    else:
+                        bny -= dy[i]
+                        bnx -= dx[i]
+
+                if visited[rny][rnx] == 0 and visited[bny][bnx] == 0:
+                    visited[rny][rnx] = 1
+                    visited[bny][bnx]  = 1
+                    q.append((ry,rx,by,bx,total+ 1))
+     
+    return Min
+
+
+
 
 n,m = map(int,input().split())
 boards = [list(input()) for _ in range(n)]
-v1 = [[0] * m for _ in range(n)]
-# 상하좌우 보기
-dy = [-1,1,0,0]
-dx = [0,0,-1,1]
-Min = 11
-rx= 0
 ry = 0
-bx = 0
+rx = 0
 by = 0
-# 빨간 공 위치 파악, 파란 공 위치 파악
+bx = 0
+Min = 11
+# 사방탐색 방향
+dy = [-1, 0, 1, 0]
+dx = [0, -1, 0, 1]
+
+
+# 빨간공, 파란공 위치 파악하기
 for i in range(n):
     for j in range(m):
         if boards[i][j] == 'R':
-            rx = j
             ry = i
-        if boards[i][j] == 'B':
-            bx = j
+            rx = j
+        
+        elif boards[i][j] == 'B':
             by = i
-            go(rx,ry,bx,by,1)
+            bx = j
 
-print(min(result))
+# 빨간 공 현재 위치, 이동횟수 큐에 넣어주기
+q = deque()
+q.append((ry,rx,by,bx,1))
+visited = [[0] * m for _ in range(n)]
+go()
+
+if Min > 10:
+    print(-1)
+else:
+    print(Min)
