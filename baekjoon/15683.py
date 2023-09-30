@@ -1,79 +1,57 @@
-# cctv 탐색 
-# 사방탐색하고 채워넣기
-import sys,copy
-input = sys.stdin.readline
+import copy
 
-def fill(tmp,i,y,x):
-
-    # 감시 영역 채우기 
-    for d in range(i):
-
-        while True:
-            ny = y + dy[i]
-            nx = x + dx[i]
-
-            if 0 > ny or ny >= n or 0 > nx or nx >= m:
-                break
-
-            if tmp[ny][nx] == 6:
-                break
-            if tmp[ny][nx] == 0:
-                tmp[ny][nx] = 9
-
-
-    return
-
-
-
-
-
-def dfs(dept,graph):
-    global Min
-    if dept == len(cctv):
-
-        # 0의 개수 return
-        cnt = 0
-        for i in range(n):
-            for j in range(m):
-                if graph[i][j] == 0:
-                    cnt += 1
-        
-        if cnt < Min:
-            Min = cnt
-    return Min
-
-    # 배열 복사
-    tmp = copy.deepcopy(graph)
-    num,y,x = cctv[dept]
-    for i in range(num):
-        fill(tmp,i,y,x)
-        dfs(dept+1,tmp)
-    
-
-
-
-n,m = map(int,input().split())
+n, m = map(int, input().split())
 cctv = []
 graph = []
-Min = int(1e9)
-# 상, 우, 하, 좌
-dy = [-1,0,1,0]
-dx = [0,-1,0,1]
 
-order = [
-    [],
-    [0,1,2,3],
-    [[0,2],[1,3],[2,4]],
-    [[0,1,2],[1,2,3],[0,1,3]],
-    [[0,1,2,3]]
-]
-
+# 북 - 동 - 남 - 서
+dy = [-1, 0, 1, 0]
+dx = [0, 1, 0, -1]
 
 for i in range(n):
-    graph.append(list(map(int,input().split())))
+    data = list(map(int, input().split()))
+    graph.append(data)
     for j in range(m):
-        if graph[i][j] in [1,2,3,4,5]:
-            # cctv번호, y좌표, x좌표 담아주기
-            cctv.append([graph[i][j],i,j])
+        if data[j] in [1, 2, 3, 4, 5]:
+            cctv.append([data[j], i, j])
 
-print(dfs(0,graph))
+def fill(board, y, x, direction):
+    for d in direction:
+        nx, ny = x, y
+        while True:
+            nx += dx[d]
+            ny += dy[d]
+            if nx < 0 or ny < 0 or nx >= m or ny >= n:
+                break
+            if board[ny][nx] == 6:
+                break
+            elif board[ny][nx] == 0:
+                board[ny][nx] = 7
+
+def dfs(depth, arr):
+    global min_value
+
+    if depth == len(cctv):
+        count = 0
+        for i in range(n):
+            count += arr[i].count(0)
+        min_value = min(min_value, count)
+        return
+    cctv_num, y, x = cctv[depth]
+    for direction in mode[cctv_num]:
+        temp = copy.deepcopy(arr)
+        fill(temp, y, x, direction)
+        dfs(depth + 1, temp)
+
+min_value = int(1e9)
+mode = [
+    [],
+    [[0], [1], [2], [3]],
+    [[0, 2], [1, 3]],
+    [[0, 1], [1, 2], [2, 3], [0, 3]],
+    [[0, 1, 2], [0, 1, 3], [1, 2, 3], [0, 2, 3]],
+    [[0, 1, 2, 3]]
+]
+
+dfs(0, graph)
+print(min_value)
