@@ -12,16 +12,12 @@ function solution(s) {
         ['nine', 9]
     ];
 
-    while (isNaN(+s)) {
-        words.forEach((word) => {
-            if (s.includes(word[0])) {
-                s = s.replace(word[0], String(word[1]));
-            }
-        });
-    }
+    words.forEach((word) => {
+        s = s.replaceAll(word[0], String(word[1]));
+    });
 
-    return +s;
+    return Number(s);
 }
 
-// 예제 사용법
+// 테스트
 console.log(solution("one4seveneight"));  // 결과: 1478
