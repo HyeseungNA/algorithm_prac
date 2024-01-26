@@ -1,28 +1,32 @@
 import sys
-
-def dfs(start, next, value, visited):
-    global min_value
-
-    if len(visited) == N:
-        if travel[next][start] != 0:
-            min_value = min(min_value, value + travel[next][start])
+input = sys.stdin.readline
+sys.setrecursionlimit(2000)
+def dfs(st,now,cnt,total):
+    global Min
+    if total > Min:
         return
+    
+    if cnt == n and st == now:
+ 
+        Min = min(Min,total)
+        return
+    for i in range(n):
+        if visited[i] == 0 and costs[now][i] != 0:
+            visited[i] = 1
+            # lst.append([now,i,costs[now][i]])
+            dfs(st,i,cnt +1,total + costs[now][i])
+            visited[i] = 0
+            # lst.pop()
 
-    for i in range(N):
-        if travel[next][i] != 0 and i != start and i not in visited:
-            visited.append(i)
-            dfs(start, i, value + travel[next][i], visited)
-            visited.pop()
 
+n = int(input())
+costs = [list(map(int,input().split())) for _ in range(n)]
+graph = [[] for _ in range(n)]
+lst = []
+visited = [0] * n
+Min = int(12e9)
 
+for i in range(n):
+    dfs(i,i,0,0)
 
-N = int(input())
-travel = [list(map(int, input().split())) for _ in range(N)]
-
-min_value = int(12e9)
-
-# 각 번호에서 시작
-for i in range(N):
-    dfs(i, i, 0, [i])
-
-print(min_value)
+print(Min)
