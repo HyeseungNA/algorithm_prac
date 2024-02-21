@@ -12,11 +12,14 @@ while True:
         min_length = min(min_length, right - left)
         sum -= numbers[left]
         left += 1
-    elif right == n:
+
+    elif right == n or left == n:
         break
+    
     else:
         sum += numbers[right]
         right += 1
+
 
 
 if min_length == sys.maxsize:
