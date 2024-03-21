@@ -1,30 +1,40 @@
 from collections import deque
-def dfs(plan):
 
-    now = plan.popleft()
-    visited[now] = 1
-    if not plan:
-        print(1)
-        exit()
+def dfs(cur):
+    global visited, result, graph
     
-    for _ in graph[now]:
-        if plan[0] in graph[now] and visited[plan[0]] == 0:
-            dfs(plan)
+    visited[cur] = True
+    set_ = set()
+    for next_ in graph[cur]:
+        if visited[next_] == 0:
+            set_.add(next_)
     
+    while set_:
+        temp = result.popleft()
+        if temp in set_:
+            set_.remove(temp)
+            dfs(temp)
+        else:
+            return False
+    
+    return True
 
-n = int(input())
-visited = [0] * (n+1)
-graph = [[] for _ in range(n+1)]
-for _ in range(n-1):
-    a,b = map(int,input().split())
+N = int(input())
+graph = [[] for _ in range(N + 1)]
+for _ in range(N - 1):
+    a,b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
+result = deque(map(int, input().split()))
+visited = [False] * (N + 1)
 
-plan = deque(list(map(int,input().split())))
 
 
-if plan[0] != 1:
-    print(0)
+first = result.popleft()
+if first != 1:
+    print("0")
 else:
-    dfs(plan)
-    print(0)
+    if dfs(1):
+        print("1")
+    else:
+        print("0")
