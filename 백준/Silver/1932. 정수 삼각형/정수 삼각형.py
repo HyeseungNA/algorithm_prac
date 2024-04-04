@@ -1,7 +1,7 @@
 n = int(input())
 
 triangles = [list(map(int, input().split())) for _ in range(n)]
-dp = [[0] * n for _ in range(n)]
+dp = [[0] * (i + 1) for i in range(n)]
 
 if n == 1:
     dp[0][0] = triangles[0][0]
