@@ -18,8 +18,6 @@ def binary_search():
     return ed
 
 
-
-
 n,m = map(int,input().split())
 trees = list(map(int,input().split()))
 trees.sort()
