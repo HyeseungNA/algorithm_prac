@@ -16,7 +16,7 @@ def solution(picks, minerals):
         req.append(tmp)
     
     # 낮은 등급의 곡괭이 점수를 기준으로 내림차순 정렬
-    req.sort(key=lambda x:(-x[2],-x[1]))
+    req.sort(key=lambda x:(-x[2],-x[1],-x[0]))
     
     # 다이아몬드 곡괭이부터 순서대로 사용
     ans = 0
