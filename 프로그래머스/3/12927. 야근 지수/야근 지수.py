@@ -1,7 +1,7 @@
 from heapq import heappush, heappop
 def solution(n, works):
     q = []
-    
+    answer = 0
     for work in works:
         heappush(q,(-work,work))
     
@@ -12,9 +12,9 @@ def solution(n, works):
         heappush(q,(-now,now))
         n -= 1
     
-    answer = 0
     for w in q:
         if w[1] >= 0:
             answer += (w[1]) ** 2
     
     return answer
+
